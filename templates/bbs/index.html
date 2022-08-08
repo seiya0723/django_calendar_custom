@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>簡易掲示板</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous">
+
+
+    <link rel="stylesheet" href="{% static 'bbs/css/index.css' %}">
+</head>
+<body>
+
+    <main class="container">
+        <form method="POST">
+            {% csrf_token %}
+            <textarea class="form-control" name="comment"></textarea>
+            <input type="submit" value="送信">
+        </form>
+
+        <div class="calender_header">
+            <div class="calender_link_area">
+                <a href="?year={{ last_month.year }}&month={{ last_month.month }}"><i class="fas fa-angle-left"></i></a>
+            </div>
+            
+            <form class="calender_form_area" action="" method="GET">
+                <select name="year">
+                    {% for year in years %}
+                    <option value="{{ year }}"  {% if year == selected_date.year %}selected{% endif %}>{{ year }}年</option>
+                    {% endfor %}
+                </select>
+                <select name="month">
+                    {% for month in months %}
+                    <option value="{{ month }}" {% if month == selected_date.month %}selected{% endif %}>{{ month }}月</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="検索">
+            </form>
+            <div class="calender_link_area">
+                <a href="?year={{ next_month.year }}&month={{ next_month.month }}"><i class="fas fa-angle-right"></i></a>
+            </div>
+        </div>
+
+        {# カレンダー #}
+        <table class="calender">
+            <thead>
+                <tr class="calender_head">
+                    <td>日</td>
+                    <td>月</td>
+                    <td>火</td>
+                    <td>水</td>
+                    <td>木</td>
+                    <td>金</td>
+                    <td>土</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for week_date in month_date %}
+                <tr>
+                    {% for date in week_date %}
+                    <td>{{ date.day }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+
+        {% for topic in topics %}
+        <div class="border">
+            {{ topic.comment }}
+        </div>
+        {% endfor %}
+
+    </main>
+</body>
+</html>
+

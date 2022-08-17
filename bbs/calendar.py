@@ -61,16 +61,17 @@ def create_months_years(selected_date, today):
     oldest  = Topic.objects.order_by( "dt").first()
     newest  = Topic.objects.order_by("-dt").first()
 
-    #最新最古のデータと指定された日付を比較。選択肢を作る
+    #最新最古のデータと指定された日付の年を比較。年の選択肢を作る
+    #Date型とDateTime型でもyearだけ比較できればOK
     if oldest and newest:
-        if selected_date < oldest.use_date:
-            years = [ i for i in range(selected_date.year,   newest.use_date.year+1)]
-        elif newest.use_date < selected_date:
-            years = [ i for i in range(oldest.use_date.year, selected_date.year+1  )]  
+        if selected_date.year < oldest.dt.year:
+            years = [ i for i in range(selected_date.year,   newest.dt.year+1)]
+        elif newest.dt.year < selected_date.year:
+            years = [ i for i in range(oldest.dt.year, selected_date.year+1  )]  
         else:
-            years = [ i for i in range(oldest.use_date.year, newest.use_date.year+1)]
+            years = [ i for i in range(oldest.dt.year, newest.dt.year+1)]
     else:
-        if selected_date < today:
+        if selected_date.year < today.year:
             years = [ i for i in range(selected_date.year, today.year+1)]
         else:
             years = [ i for i in range(today.year, selected_date.year+1)]

@@ -20,9 +20,9 @@ class IndexView(View):
 
         if form.is_valid():
             cleaned         = form.clean()
-            selected_date   = datetime.date(year=cleaned["year"], month=cleaned["month"], day=1)
+            selected_date   = datetime.datetime(year=cleaned["year"], month=cleaned["month"], day=1)
         else:
-            selected_date   = datetime.date(year=today.year, month=today.month, day=1)
+            selected_date   = datetime.datetime(year=today.year, month=today.month, day=1)
 
         context["selected_date"]                        = selected_date
         context["month_date"]                           = calendar.create_calendar(selected_date.year, selected_date.month)
